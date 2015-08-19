@@ -4,10 +4,33 @@
 
 #include "abnfgenp.h"
 
+#include <execinfo.h>
+#define FAIL_MALLOC_BACKTRACE_SIZE 100
+struct fail_malloc_backtrace
+{
+    void *array[FAIL_MALLOC_BACKTRACE_SIZE];
+    size_t size;
+    char **strings;
+    size_t strings_len[FAIL_MALLOC_BACKTRACE_SIZE];
+    unsigned int hash;
+};
+
 ag_expression * ag_expression_create(ag_handle * ag, int type)
 {
 	ag_expression * e = ag_emalloc(ag, "expression", sizeof(*e));
 	if (e) {
+#if 0
+		size_t i;
+		struct fail_malloc_backtrace bt;
+		memset(&bt, 0, sizeof(struct fail_malloc_backtrace));
+		bt.size = backtrace(bt.array, FAIL_MALLOC_BACKTRACE_SIZE);
+		bt.strings = backtrace_symbols(bt.array, bt.size);
+		printf("ag_expression_create: %p %d ", e, type);
+		for (i = 0; i < bt.size; i++) {
+			printf("--- %s", bt.strings[i]);
+		}
+		printf("\n");
+#endif
 		memset(e, 0, sizeof(*e));
 		e->any.distance = -1;
 		e->type = type;
@@ -39,6 +62,20 @@ void ag_expression_free(ag_handle * ag, ag_expression ** ex)
 		default:
 			break;
 		}
+#if 0
+		{
+		size_t i;
+		struct fail_malloc_backtrace bt;
+		memset(&bt, 0, sizeof(struct fail_malloc_backtrace));
+		bt.size = backtrace(bt.array, FAIL_MALLOC_BACKTRACE_SIZE);
+		bt.strings = backtrace_symbols(bt.array, bt.size);
+		printf("ag_expression_free: %p %d ", *ex, (*ex)->type);
+		for (i = 0; i < bt.size; i++) {
+			printf("--- %s", bt.strings[i]);
+		}
+		printf("\n");
+		}
+#endif
 		free(*ex);
 		*ex = 0;
 	}
