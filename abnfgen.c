@@ -285,6 +285,9 @@ static int ag_process(
 					depth);
 			}
 	}
+	hashfinish(&ag->complained);
+	hashfinish(&ag->nonterminals);
+	hashfinish(&ag->symbols);
 	return ag->errors ? 1 : 0;
 }
 
