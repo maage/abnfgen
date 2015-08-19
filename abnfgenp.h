@@ -256,6 +256,7 @@ void ag_output(ag_handle *, FILE *, char const *, int, unsigned int);
 /* input.c */
 
 void  ag_input(ag_handle *, FILE *, char const *, int);
+void  ag_input_string(ag_handle *, char const *, char const *, int);
 
 /* check.c */
 
@@ -314,6 +315,10 @@ char const * ag_nonterminal_name(
 ag_symbol ag_nonterminal_symbol(
 	ag_handle		* ag,
 	ag_nonterminal const  	* nt);
+int ag_complained_lookup_symbol(
+        ag_handle               * ag,
+        ag_symbol                 name);
+void ag_complained_make_symbol(ag_handle * ag, ag_symbol name);
 
 /* util.c */
 
