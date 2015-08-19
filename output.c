@@ -572,8 +572,6 @@ void ag_output(
 	int		  i,
 	unsigned int	  depth)
 {
-	unsigned int	  seed;
-
 	ag->output_file = fp;
 	ag->output_name = filename;
 	ag->depth	= depth;
@@ -581,9 +579,7 @@ void ag_output(
 	/* Only first iterm of group gets to save seed
 	 * because resetting seed meesses up random generation */
 	if (ag->seed) {
-		seed = ag->seed;
-		seed %= RAND_MAX;
-		srand(seed);
+		srand48(ag->seed);
 	}
 
 	if (ag->seed_prefix) {
