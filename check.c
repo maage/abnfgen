@@ -144,7 +144,7 @@ void ag_check(ag_handle * ag)
 		any = 0;
 		nt  = 0;
 
-		while (nt = hnext(&ag->nonterminals, ag_nonterminal, nt)) {
+		while ((nt = hnext(&ag->nonterminals, ag_nonterminal, nt))) {
 			if (nt->expression)
 				any |= ag_check_expression(ag, nt->expression);
 		}
@@ -155,7 +155,7 @@ void ag_check(ag_handle * ag)
 	 *  If anyone is without a distance, they do not terminate.
 	 */
 
-	while (nt = hnext(&ag->nonterminals, ag_nonterminal, nt))
+	while ((nt = hnext(&ag->nonterminals, ag_nonterminal, nt)))
 		if (nt->expression && nt->expression->any.distance < 0)
 			ag_error(ag, "%s: expansion for nonterminal"
 				" <%s> does not terminate\n",

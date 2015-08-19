@@ -401,7 +401,7 @@ static int ag_input_rulelist(ag_handle * ag, int tentative)
 	if (tok == AG_TOKEN_EOF)
 		return 0;
 
-	if (tok != AG_TOKEN_ERROR)
+	if (tok != AG_TOKEN_ERROR) {
 		if (tok == AG_TOKEN_NAME)
 		{
 			ag_error(ag, "%s:%d: "
@@ -419,6 +419,7 @@ static int ag_input_rulelist(ag_handle * ag, int tentative)
 				ag->input_line,
 				ag_token_string(ag, tok, buf));
 		}
+	}
 	return AG_ERROR_SYNTAX;
 }
 

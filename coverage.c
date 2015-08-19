@@ -91,7 +91,7 @@ void ag_check_coverage(ag_handle * ag)
 		all    = 1;
 		nt     = 0;
 
-		while (nt = hnext(&ag->nonterminals, ag_nonterminal, nt)) {
+		while ((nt = hnext(&ag->nonterminals, ag_nonterminal, nt))) {
 			change |= ag_check_expression_coverage(ag,
 				nt->expression);
 			all &= nt->expression->any.coverage_recursive;

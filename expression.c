@@ -36,7 +36,7 @@ void ag_expression_free(ag_handle * ag, ag_expression ** ex)
 		switch ((*ex)->type) {
 		case AG_EXPRESSION_ALTERNATION:
 		case AG_EXPRESSION_CONCATENATION:
-			for (next = (*ex)->compound.child; child = next;) {
+			for (next = (*ex)->compound.child; (child = next);) {
 				next = child->any.next;
 				ag_expression_free(ag, &child);
 			}

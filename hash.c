@@ -292,7 +292,7 @@ void hashfinish(hashtable * h)
 
 	  while (s < e) {
 		register char * n = *s++, * p;
-		while (p = n) {
+		while ((p = n)) {
 			n = NEXT(h, p);
 			free(p);
 		}

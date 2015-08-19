@@ -127,7 +127,7 @@ static int open_output_file(
 
 	w = tmp;
 	if (dir) {
-		while (*w = *dir++)
+		while ((*w = *dir++))
 			w++;
 		if (w > tmp && w[-1] != '/')
 			*w++ = '/';
@@ -296,7 +296,7 @@ int main(int ac, char ** av)
 	char 	       ** av_tentative = 0;
 	char		* start_symbol = 0;
 
-	if (progname = strrchr(av[0], '/')) progname++;
+	if ((progname = strrchr(av[0], '/'))) progname++;
 	else progname = av[0];
 
 	av_tentative = argvadd(av_tentative, "");
