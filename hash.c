@@ -1,10 +1,4 @@
 /*
- * $Id: hash.c,v 1.1 2004/10/11 00:38:57 jutta Exp $
- *
- * $Log: hash.c,v $
- * Revision 1.1  2004/10/11 00:38:57  jutta
- * Initial revision
- *
  *
  */
 
@@ -13,9 +7,6 @@
 #include <assert.h>
 
 #include "abnfgenp.h"
-
-static char const rcsid[] = 
-  "$Id: hash.c,v 1.1 2004/10/11 00:38:57 jutta Exp $";
 
 /*  hash.c -- A binary hashtable.
  * 

@@ -1,18 +1,9 @@
 /*
- * $Id: scan.c,v 1.1 2004/10/11 00:38:57 jutta Exp $
- *
- * $Log: scan.c,v $
- * Revision 1.1  2004/10/11 00:38:57  jutta
- * Initial revision
- *
  *
  */
 
 #include "abnfgenp.h"
 #include <ctype.h>
-
-static char const rcsid[] = 
-  "$Id: scan.c,v 1.1 2004/10/11 00:38:57 jutta Exp $";
 
 #define	IS_IDENTIFIER_CHAR(ag, c)		\
 	(  (c) == '-' 				\

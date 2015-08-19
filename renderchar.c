@@ -1,19 +1,8 @@
 /*
- * $Id: renderchar.c,v 1.1 2004/10/11 00:38:57 jutta Exp $
- *
- * $Log: renderchar.c,v $
- * Revision 1.1  2004/10/11 00:38:57  jutta
- * Initial revision
- *
- * Revision 1.2  2004/10/10 18:31:26  jutta
- * Add header
  *
  */
 
 #include "abnfgenp.h"
-
-static char const rcsid[] = 
-  "$Id: renderchar.c,v 1.1 2004/10/11 00:38:57 jutta Exp $";
 
 char const * renderchar(unsigned char c)
 {

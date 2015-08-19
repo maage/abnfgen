@@ -1,13 +1,4 @@
 /*
- * $Id: output.c,v 1.2 2004/10/23 00:50:32 jutta Exp $
- *
- * $Log: output.c,v $
- * Revision 1.2  2004/10/23 00:50:32  jutta
- * add verbose expansions
- *
- * Revision 1.1  2004/10/11 00:38:57  jutta
- * Initial revision
- *
  *
  */
 
@@ -17,9 +8,6 @@
 #include <limits.h>
 #include <errno.h>
 #include <stdio.h>
-
-static char const rcsid[] = 
-  "$Id: output.c,v 1.2 2004/10/23 00:50:32 jutta Exp $";
 
 static void ag_output_expression(ag_handle *, ag_expression *, int, int);
 

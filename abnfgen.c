@@ -1,21 +1,4 @@
 /*
- * $Id: abnfgen.c,v 1.5 2004/10/23 01:21:52 jutta Exp $
- * $Log: abnfgen.c,v $
- * Revision 1.5  2004/10/23 01:21:52  jutta
- * keep track of which nonterminals we've complained about.
- *
- * Revision 1.4  2004/10/23 00:50:32  jutta
- * add verbose expansions
- *
- * Revision 1.3  2004/10/19 04:45:55  jutta
- * reset the default depth to 100.
- *
- * Revision 1.2  2004/10/18 07:38:10  jutta
- * Bump default depth to a 1000.
- *
- * Revision 1.1  2004/10/11 00:36:50  jutta
- * Initial revision
- *
  *
  */
 
@@ -28,9 +11,6 @@
 #include <errno.h>
 
 #include "abnfgenp.h"
-
-static char const rcsid[]
-	= "$Id: abnfgen.c,v 1.5 2004/10/23 01:21:52 jutta Exp $";
 
 static char const RFC_4234_CORE[] =
 	"ALPHA	=  %x41-5A / %x61-7A   ; A-Z / a-z\n"

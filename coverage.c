@@ -1,17 +1,8 @@
 /*
- * $Id: coverage.c,v 1.1 2004/10/11 00:38:57 jutta Exp $
- *
- * $Log: coverage.c,v $
- * Revision 1.1  2004/10/11 00:38:57  jutta
- * Initial revision
- *
  *
  */
 
 #include "abnfgenp.h"
-
-static char const rcsid[] = 
-  "$Id: coverage.c,v 1.1 2004/10/11 00:38:57 jutta Exp $";
 
 /* Return 1 if this expression is recursively covered, given that the
  * pointing-to expressions are recursively covered, 0 if it isn't.
