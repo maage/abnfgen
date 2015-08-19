@@ -328,6 +328,10 @@ char const * ag_nonterminal_name(
 ag_symbol ag_nonterminal_symbol(
 	ag_handle		* ag,
 	ag_nonterminal const  	* nt);
+int ag_complained_lookup_symbol(
+        ag_handle               * ag,
+        ag_symbol                 name);
+void ag_complained_make_symbol(ag_handle * ag, ag_symbol name);
 
 /* util.c */
 
