@@ -84,7 +84,7 @@ ag_symbol ag_symbol_make_lowercase(
 
 	if (!tmp) return 0;
 	result = hnew(&ag->symbols, char, tmp, strlen(tmp) + 1);
-	VFREE(tmp);
+	free(tmp);
 
 	return result;
 }
@@ -98,7 +98,7 @@ ag_symbol ag_symbol_lookup_lowercase(
 
 	if (!tmp) return 0;
 	result = hnew(&ag->symbols, char, tmp, strlen(tmp) + 1);
-	VFREE(tmp);
+	free(tmp);
 
 	return result;
 }

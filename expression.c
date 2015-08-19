@@ -48,7 +48,7 @@ void ag_expression_free(ag_handle * ag, ag_expression ** ex)
 		default:
 			break;
 		}
-		VFREE(*ex);
+		free(*ex);
 		*ex = 0;
 	}
 }

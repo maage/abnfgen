@@ -49,7 +49,7 @@ int argvpos(char const * const * argv, char const * arg)
 char ** argvadd(char ** argv, char const * arg)
 {
 	if (!argv) {
-		argv = TMALLOC(char *, 1 + !!arg);
+		argv = malloc(sizeof(char *) * (1 + !!arg));
 		if (arg) {
 			argv[1] = (char *)0;
 			argv[0] = STRMALCPY(arg);
@@ -58,7 +58,7 @@ char ** argvadd(char ** argv, char const * arg)
 	else if (argvarg((char const * const *)argv, arg)) return argv;
 	else {
 		size_t len  = argvlen((char const * const *)argv );
-		argv = TREALLOC( char *, argv, len + 2 );
+		argv = realloc(argv, sizeof(char *) * (len + 2));
 
 		argv[ len     ] = STRMALCPY( arg );
 		argv[ len + 1 ] = (char *)0;
@@ -71,7 +71,7 @@ char ** argvdel(char ** argv, char const * arg)
 	char ** a = argvarg((char const * const *)argv, arg);
 	if (!a || !arg) return argv;
 
-	VFREE( *a );
+	free( *a );
 
 	while (a[0] = a[1]) a++;
 	return argv;
@@ -82,8 +82,8 @@ void argvfree(argv) char ** argv;
 	char ** a;
 
 	if (argv) {
-		for (a = argv; *a; a++) VFREE(*a);
-		VFREE(argv);
+		for (a = argv; *a; a++) free(*a);
+		free(argv);
 	}
 }
 
@@ -92,7 +92,7 @@ char ** argvdup(char const * const * argv)
 	if (!argv) return 0;
 	else {
 		int     n = argvlen(argv);
-		char ** a = TMALLOC( char *, n + 1 );
+		char ** a = malloc(sizeof(char *) * (n + 1));
 
 		a[n] = (char *)0;
 		while (n--) a[n] = STRMALCPY(argv[n]);
@@ -111,11 +111,11 @@ char ** argvcat(char ** argv, char const * const * brgv)
 
 	if (!blen) return argv;
 	if (!alen) {
-		if (argv) VFREE( argv );
+		if (argv) free( argv );
 		return argvdup( brgv );
 	}
 
-	argv = TREALLOC( char *, argv, alen + blen + 1);
+	argv = realloc(argv, sizeof(char *) * (alen + blen + 1));
 	for (a = argv + alen, b = brgv; *b; b++)
 		if (!argvarg((char const * const *)argv, *b))
 			*a++ = STRMALCPY( *b );
