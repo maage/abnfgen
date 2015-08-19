@@ -32,7 +32,7 @@ static int ag_input_element(ag_handle *ag, int tok, ag_expression ** out)
 		}
 		*out = child;
 		break;
-	
+
 	case AG_TOKEN_NAME:
 	case AG_TOKEN_STRING:
 	case AG_TOKEN_OCTETS:
@@ -63,7 +63,7 @@ static int ag_input_element(ag_handle *ag, int tok, ag_expression ** out)
 		(*out)->repetition.left_chance = 1;
 		(*out)->repetition.right_chance = 1;
 		break;
-	
+
 	case AG_TOKEN_RANGE:
 		*out = ag_expression_create(ag, AG_TOKEN_RANGE);
 		if (!*out) {
@@ -96,26 +96,33 @@ static int ag_input_repetition(ag_handle *ag, int tok, ag_expression ** out)
 
 	*out = 0;
 
+	if (tok == AG_TOKEN_ERROR)
+		return AG_ERROR_SYNTAX;
+
 	if (tok == AG_TOKEN_CHANCE) {
 		left_chance = (unsigned long)ag->token_number;
 		tok = ag_read_token(ag);
+		if (tok == AG_TOKEN_ERROR)
+			return AG_ERROR_SYNTAX;
 	}
-	if (tok == AG_TOKEN_ERROR)
-		return AG_ERROR_SYNTAX;
 
 	if (tok == AG_TOKEN_NUMBER) {
 
 		num2 = num1 = ag->token_number;
 
 		tok = ag_read_token(ag);
-		if (ag->token_saw_space)
+		if (ag->token_saw_space) {
 			ag_error(ag, "%s:%d: "
 				"ABNF doesn't allow white space after "
 				"repeat count, before %s\n",
 				ag->input_name,
 				ag->input_line,
 				ag_token_string(ag, tok, buf));
+		}
+		if (tok == AG_TOKEN_ERROR)
+			return AG_ERROR_SYNTAX;
 	}
+
 	if (tok == AG_TOKEN_ASTERISK) {
 
 		/*  If an * is used, an unset first
@@ -126,20 +133,24 @@ static int ag_input_repetition(ag_handle *ag, int tok, ag_expression ** out)
 
 		num2 = -1;
 		tok  = ag_read_token(ag);
-
-		if (ag->token_saw_space)
+		if (ag->token_saw_space) {
 			ag_error(ag, "%s:%d: "
 				"ABNF doesn't allow white space after *, "
 				"before %s\n",
 				ag->input_name,
 				ag->input_line,
 				ag_token_string(ag, tok, buf));
+		}
+		if (tok == AG_TOKEN_ERROR)
+			return AG_ERROR_SYNTAX;
 
 		/* An optional {chance}
 		 */
 		if (tok == AG_TOKEN_CHANCE) {
 			right_chance = (unsigned long)ag->token_number;
 			tok = ag_read_token(ag);
+			if (tok == AG_TOKEN_ERROR)
+				return AG_ERROR_SYNTAX;
 		}
 
 		/*  An optional number, defaulting
@@ -150,24 +161,25 @@ static int ag_input_repetition(ag_handle *ag, int tok, ag_expression ** out)
 			num2 = ag->token_number;
 			tok  = ag_read_token(ag);
 
-			if (ag->token_saw_space)
+			if (ag->token_saw_space) {
 				ag_error(ag, "%s:%d: "
 					"ABNF doesn't allow white space after "
 					"maximum repeat count, before %s\n",
 					ag->input_name,
 					ag->input_line,
 					ag_token_string(ag, tok, buf));
+			}
+			if (tok == AG_TOKEN_ERROR)
+				return AG_ERROR_SYNTAX;
 		}
-		else if (tok == AG_TOKEN_ERROR)
-			return AG_ERROR_SYNTAX;
 	}
 	else {
-		if (num1 == -1)
+		if (num1 == -1) {
 			num2 = num1 = 1;
-	
-		else
+		}
+		else {
 			num2 = num1;
-
+		}
 		left_chance  = 1;
 		right_chance = 1;
 	}
@@ -178,8 +190,9 @@ static int ag_input_repetition(ag_handle *ag, int tok, ag_expression ** out)
 		return err;
 	}
 
-	if (num1 == num2 && num1 == 1) 
+	if (num1 == num2 && num1 == 1) {
 		*out = child;
+	}
 	else {
 		*out = ag_expression_create(ag, AG_EXPRESSION_REPETITION);
 		if (!*out) {
