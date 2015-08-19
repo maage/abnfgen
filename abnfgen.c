@@ -270,9 +270,10 @@ static int ag_process(
 
 				if (open_output_file(ag,
 					output_directory, pattern, i + 1,
-					&out_file, &out_name))
+					&out_file, &out_name)) {
 
 					break;
+				}
 
 				ag_output(ag, out_file, out_name, i + 1, depth);
 				fclose(out_file);
