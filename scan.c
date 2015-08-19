@@ -564,7 +564,7 @@ char const * ag_token_string(ag_handle * ag, ag_type tok, char * buf)
 	case AG_TOKEN_OCTETS:
 		n = ag_symbol_size(ag, ag->token_symbol);
 		sprintf(buf, "<octets \"%.*s\">",
-			n > 100 ? 100 : (int)n, 
+			(int)(n > 100 ? 100 : n),
 			ag_symbol_text(ag, ag->token_symbol));
 		break;
 

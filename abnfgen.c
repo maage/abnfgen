@@ -140,7 +140,7 @@ static int open_output_file(
 
 	w = tmp;
 	if (dir) {
-		while ((*w = *dir++) != '\0')
+		while ((*w = *dir++))
 			w++;
 		if (w > tmp && w[-1] != '/')
 			*w++ = '/';

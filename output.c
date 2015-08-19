@@ -224,7 +224,6 @@ static void ag_output_repetition(
 	int 		depth)
 {
 	unsigned long 	l;
-	int		entry_depth = depth;
 
 	if (ag->full_coverage && !e->any.coverage_self) {
 
