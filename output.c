@@ -578,14 +578,22 @@ void ag_output(
 	ag->output_name = filename;
 	ag->depth	= depth;
 
-	seed = ag->seed;
-	seed %= RAND_MAX;
-	srand(seed);
+	/* Only first iterm of group gets to save seed
+	 * because resetting seed meesses up random generation */
+	if (ag->seed) {
+		seed = ag->seed;
+		seed %= RAND_MAX;
+		srand(seed);
+	}
 
-	if (ag->seed_prefix) printf("%s%u\n", ag->seed_prefix, seed);
+	if (ag->seed_prefix) {
+		printf("%s%u\n", ag->seed_prefix, ag->seed);
+		ag->seed_prefix = NULL;
+	}
+
+	ag->seed = 0;
 
 	ag_output_rulelist(ag, depth);
-	ag->seed = rand();
 
 	if (ag->full_coverage)
 		ag_check_coverage(ag);
