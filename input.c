@@ -1,23 +1,8 @@
 /*
- * $Id: input.c,v 1.3 2004/10/23 01:35:16 jutta Exp jutta $
- *
- * $Log: input.c,v $
- * Revision 1.3  2004/10/23 01:35:16  jutta
- * dont dereference NULL nonterminal when adding.
- *
- * Revision 1.2  2004/10/23 00:50:32  jutta
- * add verbose expansions
- *
- * Revision 1.1  2004/10/11 00:38:57  jutta
- * Initial revision
- *
  *
  */
 
 #include "abnfgenp.h"
-
-static char const rcsid[] = 
-  "$Id: input.c,v 1.3 2004/10/23 01:35:16 jutta Exp jutta $";
 
 static int ag_input_alternation(
 	ag_handle      * ag,

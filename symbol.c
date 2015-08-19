@@ -1,18 +1,9 @@
 /*
- * $Id: symbol.c,v 1.1 2004/10/11 00:38:57 jutta Exp $
- *
- * $Log: symbol.c,v $
- * Revision 1.1  2004/10/11 00:38:57  jutta
- * Initial revision
- *
  *
  */
 
 #include "abnfgenp.h"
 #include <ctype.h>
-
-static char const rcsid[] = 
-  "$Id: symbol.c,v 1.1 2004/10/11 00:38:57 jutta Exp $";
 
 static char * dup_lowercase(
 	ag_handle	* ag,

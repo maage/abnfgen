@@ -1,17 +1,8 @@
 /*
- * $Id: argv.c,v 1.1 2004/10/11 00:36:50 jutta Exp $
- *
- * $Log: argv.c,v $
- * Revision 1.1  2004/10/11 00:36:50  jutta
- * Initial revision
- *
  *
  */
 
 #include "abnfgenp.h"
-
-static char const rcsid[] = 
-  "$Id: argv.c,v 1.1 2004/10/11 00:36:50 jutta Exp $";
 
 /*
  *  argv.c -- manipulating a malloc'ed argv vector.

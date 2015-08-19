@@ -1,20 +1,8 @@
 /*
- * $Id: nonterminal.c,v 1.2 2004/10/23 01:21:52 jutta Exp $
- *
- * $Log: nonterminal.c,v $
- * Revision 1.2  2004/10/23 01:21:52  jutta
- * keep track of which nonterminals we've complained about.
- *
- * Revision 1.1  2004/10/11 00:38:57  jutta
- * Initial revision
- *
  *
  */
 
 #include "abnfgenp.h"
-
-static char const rcsid[] = 
-  "$Id: nonterminal.c,v 1.2 2004/10/23 01:21:52 jutta Exp $";
 
 int ag_complained_lookup_symbol(
 	ag_handle 		* ag,

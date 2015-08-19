@@ -1,17 +1,8 @@
 /*
- * $Id: expression.c,v 1.1 2004/10/11 00:38:57 jutta Exp $
- *
- * $Log: expression.c,v $
- * Revision 1.1  2004/10/11 00:38:57  jutta
- * Initial revision
- *
  *
  */
 
 #include "abnfgenp.h"
-
-static char const rcsid[] = 
-  "$Id: expression.c,v 1.1 2004/10/11 00:38:57 jutta Exp $";
 
 ag_expression * ag_expression_create(ag_handle * ag, int type)
 {

@@ -1,30 +1,9 @@
 /*
- * $Id: check.c,v 1.5 2004/10/23 01:21:52 jutta Exp $
- *
- * $Log: check.c,v $
- * Revision 1.5  2004/10/23 01:21:52  jutta
- * keep track of which nonterminals we've complained about.
- *
- * Revision 1.4  2004/10/19 04:55:02  jutta
- * Check for loops.
- *
- * Revision 1.3  2004/10/18 07:43:57  jutta
- * Set distance for undefined nonterminals to 0, get more meaningful errors.
- *
- * Revision 1.2  2004/10/18 07:37:30  jutta
- * Test for endless loops in grammars.
- *
- * Revision 1.1  2004/10/11 00:36:50  jutta
- * Initial revision
- *
  *
  */
 
 #include "abnfgenp.h"
 #include <limits.h>
-
-static char const rcsid[] = 
-  "$Id: check.c,v 1.5 2004/10/23 01:21:52 jutta Exp $";
 
 static int ag_check_expression(ag_handle * ag, ag_expression * e)
 {

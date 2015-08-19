@@ -1,18 +1,9 @@
 /*
- * $Id: toutf8.c,v 1.1 2004/10/11 00:38:57 jutta Exp $
- *
- * $Log: toutf8.c,v $
- * Revision 1.1  2004/10/11 00:38:57  jutta
- * Initial revision
- *
  *
  */
 
 #include "abnfgenp.h"
 #include <ctype.h>
-
-static char const rcsid[] =
-	"$Id: toutf8.c,v 1.1 2004/10/11 00:38:57 jutta Exp $";
 
 int to_utf8(unsigned long uc, unsigned char * p)
 {
