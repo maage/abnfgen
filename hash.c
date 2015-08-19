@@ -108,7 +108,7 @@ int hashinit(hashtable * t, size_t elsize, int m)
 	 */
 	{ 	register void   ** c, ** e;
 
-		if (!(c = t->h = TMALLOC(void *, m))) return -1;
+		if (!(c = t->h = malloc(sizeof(void *) * m))) return -1;
 		for (e = c + m; c < e; *c++ = (void *)0)
 			;
 	}
@@ -123,10 +123,10 @@ hashtable * hashcreate(size_t elsize, int m)
 {
 	hashtable * t;
 
-	if (  !(t = TMALLOC(hashtable, 1))
+	if (  !(t = malloc(sizeof(hashtable)))
 	   || hashinit(t, elsize, m)) {
 
-		if (t) VFREE(t);
+		if (t) free(t);
 		return (hashtable *)0;
 	}
 	return t;
@@ -137,7 +137,7 @@ hashtable * hashcreate(size_t elsize, int m)
 int hashgrow(hashtable * h)
 {
 	{ void ** c;
-	  if (!(c = TREALLOC(void *, h->h, h->m * 2))) {
+	  if (!(c = realloc(h->h, sizeof(void *) * h->m * 2))) {
 		return -1;
 	  }
 	  h->h = c;
@@ -294,11 +294,11 @@ void hashfinish(hashtable * h)
 		register char * n = *s++, * p;
 		while ((p = n)) {
 			n = NEXT(h, p);
-			VFREE(p);
+			free(p);
 		}
 	  }
 	}
-	VFREE(h->h);
+	free(h->h);
 }
 
 /*  Destroy a hashtable and free the hashtable object itself.
@@ -308,7 +308,7 @@ void hashdestroy(hashtable * h)
 	assert(h);
 
 	hashfinish(h);
-	VFREE(h);
+	free(h);
 }
 
 
@@ -346,6 +346,6 @@ void hashdelete(hashtable * h, void * ob)
 	  *s = NEXT(h, ob);
 	}
 
-	VFREE(ob);
+	free(ob);
 	h->n--;
 }
