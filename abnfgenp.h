@@ -239,10 +239,7 @@ size_t 	     hashsize(	 hashtable *, void const *);
 
 /* rand */
 
-#ifndef	RAND_MAX 	/* sigh */
-#define RAND_MAX 32767
-#endif
-#define PICK(n) 	((int)((double)rand() / ((double)RAND_MAX + 1) * (n)))
+#define PICK(n) 	((int)(drand48() * ((double)(n))))
 
 /* string.c */
 
