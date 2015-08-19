@@ -111,9 +111,12 @@ static ag_type ag_read_token_number(ag_handle * ag)
 
 static ag_type ag_read_token_name(ag_handle * ag)
 {
-	static char	* s = 0;
-	static size_t	  m = 0;
-	size_t		  n = 0;
+	char	* s;
+	char      init_s[64];
+	size_t	  m = 64;
+	size_t	  n = 0;
+
+	s = init_s;
 
 	for (;;) {
 		int c;
@@ -143,14 +146,18 @@ static ag_type ag_read_token_name(ag_handle * ag)
 
 	s[n] = 0;
 	ag->token_symbol = ag_symbol_make(ag, s);
+	if (m > 64) free(s);
 	return ag->token_symbol ? AG_TOKEN_NAME : AG_TOKEN_ERROR;
 }
 
 static ag_type ag_read_token_literal(ag_handle * ag, char endc)
 {
-	static char	* s = 0;
-	static size_t	  m = 0;
-	size_t		  n = 0;
+	char	* s;
+	char      init_s[64];
+	size_t	  m = 64;
+	size_t	  n = 0;
+
+	s = init_s;
 
 	for (;;) {
 		int c;
@@ -164,19 +171,20 @@ static ag_type ag_read_token_literal(ag_handle * ag, char endc)
 				ag_error(ag, "%s:%d: failed to reallocate "
 					"%lu bytes for name token buffer\n",
 					ag->input_name, ag->input_line, m);
+				if (m > 64) free(s);
 				return AG_TOKEN_ERROR;
 			}
 			s = tmp;
 		}
 		c = ag_getc(ag);
-		if (c == EOF)
-		{
+		if (c == EOF) {
 			ag_error(ag, "%s:%d: EOF in literal %c%.*s%s%c\n",
 				ag->input_name,
 				ag->input_line,
 				endc,
 				(int)(n > 80 ? 80 : n), s, n > 80 ? "..." : "",
 				endc);
+			if (m > 64) free(s);
 			return AG_TOKEN_ERROR;
 		}
 		if (c == (unsigned char)endc)
@@ -185,14 +193,18 @@ static ag_type ag_read_token_literal(ag_handle * ag, char endc)
 	}
 	s[n] = 0;
 	ag->token_symbol = ag_symbol_make_binary(ag, s, n);
+	if (m > 64) free(s);
 	return ag->token_symbol ? AG_TOKEN_OCTETS : AG_TOKEN_ERROR;
 }
 
 static ag_type ag_read_token_string(ag_handle * ag)
 {
-	static char	* s = 0;
-	static size_t	  m = 0;
-	size_t		  n = 0;
+	char	* s;
+	char      init_s[64];
+	size_t	  m = 64;
+	size_t	  n = 0;
+
+	s = init_s;
 
 	for (;;) {
 		int c;
@@ -225,14 +237,18 @@ static ag_type ag_read_token_string(ag_handle * ag)
 	}
 	s[n] = 0;
 	ag->token_symbol = ag_symbol_make(ag, s);
+	if (m > 64) free(s);
 	return ag->token_symbol ? AG_TOKEN_STRING : AG_TOKEN_ERROR;
 }
 
 static ag_type ag_read_token_prose(ag_handle * ag)
 {
-	static char	* s = 0;
-	static size_t	  m = 0;
-	size_t		  n = 0;
+	char	* s;
+	char      init_s[64];
+	size_t	  m = 64;
+	size_t	  n = 0;
+
+	s = init_s;
 
 	for (;;) {
 		int c;
@@ -266,10 +282,12 @@ static ag_type ag_read_token_prose(ag_handle * ag)
 	if (n == 1) {
 		s[0] = tolower(s[0]);
 		ag->token_symbol = ag_symbol_make(ag, s);
+		if (m > 64) free(s);
 		return ag->token_symbol ? AG_TOKEN_STRING : AG_TOKEN_ERROR;
 	}
 	else {
 		ag->token_symbol = ag_symbol_make(ag, s);
+		if (m > 64) free(s);
 		return ag->token_symbol ? AG_TOKEN_PROSE : AG_TOKEN_ERROR;
 	}
 }
@@ -362,9 +380,12 @@ static ag_type ag_read_token_chars(ag_handle * ag)
 {
 	int c, base;
 	unsigned long num = 0;
-	static char	* s = 0;
-	static size_t	  m = 0;
-	size_t		  n = 0;
+	char	* s;
+	char      init_s[64];
+	size_t	  m = 64;
+	size_t	  n = 0;
+
+	s = init_s;
 
 	c = ag_getc(ag);
 
@@ -409,12 +430,14 @@ static ag_type ag_read_token_chars(ag_handle * ag)
 			break;
 		}
 		if (ag_read_token_code(ag, base, &num)) {
+			if (m > 64) free(s);
 			return AG_TOKEN_ERROR;
 		}
 		c = ag_getc(ag);
 	}
 	ag_ungetc(ag, c);
 	ag->token_symbol = ag_symbol_make_binary(ag, s, n);
+	if (m > 64) free(s);
 
 	return ag->token_symbol ? AG_TOKEN_OCTETS : AG_TOKEN_ERROR;
 }
