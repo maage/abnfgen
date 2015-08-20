@@ -14,24 +14,24 @@
 
 static char const RFC_4234_CORE[] =
 	"ALPHA	=  %x41-5A / %x61-7A   ; A-Z / a-z\n"
-	"BIT   	=  \"0\" / \"1\"\n"
-	"CHAR  	=  %x01-7F	; any 7-bit US-ASCII character,\n"
+	"BIT	=  \"0\" / \"1\"\n"
+	"CHAR	=  %x01-7F	; any 7-bit US-ASCII character,\n"
 	"			;  excluding NUL\n"
-	"CR    	=  %x0D		; carriage return\n"
-	"CRLF  	=  CR LF	; Internet standard newline\n"
-	"CTL   	=  %x00-1F / %x7F\n"
+	"CR	=  %x0D		; carriage return\n"
+	"CRLF	=  CR LF	; Internet standard newline\n"
+	"CTL	=  %x00-1F / %x7F\n"
 	"			; controls\n"
-	"DIGIT 	=  %x30-39	; 0-9\n"
+	"DIGIT	=  %x30-39	; 0-9\n"
 	"DQUOTE	=  %x22		; \" (Double Quote)\n"
 	"HEXDIG	=  DIGIT / \"A\" / \"B\" / \"C\" / \"D\" / \"E\" / \"F\"\n"
-	"HTAB  	=  %x09		; horizontal tab\n"
-	"LF    	=  %x0A		; linefeed\n"
-	"LWSP  	=  *(WSP / CRLF WSP)\n"
+	"HTAB	=  %x09		; horizontal tab\n"
+	"LF	=  %x0A		; linefeed\n"
+	"LWSP	=  *(WSP / CRLF WSP)\n"
 	"			; linear white space (past newline)\n"
-	"OCTET 	=  %x00-FF	; 8 bits of data\n"
-	"SP    	=  %x20\n"
-	"VCHAR 	=  %x21-7E 	; visible (printing) characters\n"
-	"WSP   	=  SP / HTAB	; white space\n";
+	"OCTET	=  %x00-FF	; 8 bits of data\n"
+	"SP	=  %x20\n"
+	"VCHAR	=  %x21-7E 	; visible (printing) characters\n"
+	"WSP	=  SP / HTAB	; white space\n";
 
 static void usage(char const * progname)
 {
@@ -39,15 +39,15 @@ static void usage(char const * progname)
 		"Usage: %s [options][inputs]\n", progname, VERSION, progname);
 	fputs(
 	"Output:\n"
-	"   -d dir	   -- write output files to directory <dir>\n"
-	"   -n n	   -- write <n> output files with #=1..n\n"
+	"   -d dir         -- write output files to directory <dir>\n"
+	"   -n n           -- write <n> output files with #=1..n\n"
 	"   -p pat#.suf    -- create filenames \"pat#.suf\"\n",
 		stderr);
 	fputs(
 	"Processing:\n"
-	"   -c 	           -- attempt full coverage\n"
-	"   -l 	           -- (\"legal\") strict RFC 4234 only\n"
-	"   -y n	   -- limit recursion depth to <n>\n"
+	"   -c             -- attempt full coverage\n"
+	"   -l             -- (\"legal\") strict RFC 4234 only\n"
+	"   -y n           -- limit recursion depth to <n>\n"
 	"   -r n           -- seed random generator with <n>\n"
 	"   -s nonterminal -- start symbol is <nonterminal>\n"
 	"   -t file        -- include tentative definitions in <file>\n"
@@ -55,10 +55,10 @@ static void usage(char const * progname)
 	   stderr);
 	fputs(
 	"Miscellaneous:\n"
-	"   -x 	           -- exclude (don't preload) the core syntax\n"
-	"   -h 	           -- print this statement\n"
+	"   -x             -- exclude (don't preload) the core syntax\n"
+	"   -h             -- print this statement\n"
 	"   -w prefix      -- write seed to stdout, prefixed with <prefix>\n"
-	"   -v 	           -- verbose; write rule trace to stderr\n",
+	"   -v             -- verbose; write rule trace to stderr\n",
 		stderr);
 	exit(64);
 }
@@ -79,7 +79,7 @@ void ag_error(ag_handle * ag, char const * fmt, ...)
 void * ag_emalloc(
 	ag_handle * ag,
 	char const * purpose,
-	size_t 	     n)
+	size_t	     n)
 {
 	char * tmp = malloc(n);
 	if (!tmp) {
@@ -95,7 +95,7 @@ static int open_output_file(
 	ag_handle * ag,
 	char const * dir,
 	char const * pat,
-	int 	     i,
+	int	     i,
 	FILE      ** f_out,
 	char      ** name_out)
 {
@@ -135,14 +135,14 @@ static int open_output_file(
 }
 
 static int ag_process(
-	char const  	   * progname,
-	int 	      	     verbose,
-	int 	      	     understand_prose,
-	int 	      	     legal,
-	int 	      	     underscore_in_identifiers,
-	int 	      	     full_coverage,
-	char const  	   * output_directory,
-	char const  	   * pattern,
+	char const	   * progname,
+	int		     verbose,
+	int		     understand_prose,
+	int		     legal,
+	int		     underscore_in_identifiers,
+	int		     full_coverage,
+	char const	   * output_directory,
+	char const	   * pattern,
 	unsigned int	     seed,
 	char const	   * seed_prefix,
 	unsigned int	     n_cases,
@@ -155,10 +155,10 @@ static int ag_process(
 	unsigned int  i;
 
 	ag = calloc(sizeof(ag_handle), 1);
-	ag->verbose          = verbose;
+	ag->verbose	     = verbose;
 	ag->full_coverage    = full_coverage;
-	ag->progname         = progname;
-	ag->seed             = seed;
+	ag->progname	     = progname;
+	ag->seed	     = seed;
 	ag->seed_prefix      = seed_prefix;
 	ag->understand_prose = !!understand_prose;
 	ag->legal	     = !!legal;
@@ -166,7 +166,7 @@ static int ag_process(
 
 	hinit(&ag->symbols, 	 char, 1024 * 8);
 	hinit(&ag->nonterminals, ag_nonterminal, 512);
-	hinit(&ag->complained,   char, 512);
+	hinit(&ag->complained,	 char, 512);
 
 	if (start_symbol)
 		ag->start_symbol = ag_symbol_make_lowercase(ag,
