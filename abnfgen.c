@@ -172,7 +172,7 @@ static int ag_process(
 		ag->start_symbol = ag_symbol_make_lowercase(ag,
 			start_symbol);
 
-	if (av_tentative)
+	if (av_tentative) {
 		for (i = 0; av_tentative[i]; i++) {
 
 			if (*av_tentative[i] == '\0')
@@ -195,9 +195,11 @@ static int ag_process(
 				}
 			}
 		}
+	}
 
-	if (!*av)
+	if (!*av) {
 		ag_input(ag, stdin, "*standard input*", 0);
+	}
 	else {
 		for (i = 0; av[i]; i++) {
 			FILE * f = fopen(av[i], "r");
@@ -245,11 +247,12 @@ static int ag_process(
 			}
 		}
 		else
-			for (i = 1; i <= n_cases && !ag->errors; i++)  {
+			for (i = 1; i <= n_cases && !ag->errors; i++) {
 				ag_output(ag, stdout, "*standard output*", i,
 					depth);
 			}
 	}
+
 	hashfinish(&ag->complained);
 	hashfinish(&ag->nonterminals);
 	hashfinish(&ag->symbols);

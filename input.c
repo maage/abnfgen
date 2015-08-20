@@ -284,6 +284,7 @@ static int ag_input_alternation(
 			ag_expression_free(ag, &child);
 			return AG_TOKEN_ERROR;
 		}
+
 	 	if (tok != AG_TOKEN_OR)
 			break;
 		tok = ag_read_token(ag);
@@ -310,8 +311,8 @@ static int ag_input_rulelist(ag_handle * ag, int tentative)
 {
 	int 		  err, equals, tok;
 	ag_symbol	  rulename;
-	ag_nonterminal * nt;
-	ag_expression  * alt = 0;
+	ag_expression   * alt = 0;
+	ag_nonterminal  * nt = 0;
 	char		  buf[200];
 
 	tok = ag_read_token(ag);
@@ -341,83 +342,88 @@ static int ag_input_rulelist(ag_handle * ag, int tentative)
 			ag_expression_free(ag, &alt);
 			break;
 		}
-		if (alt) {
-			if (equals == AG_TOKEN_EQUALS) {
+		if (alt && equals == AG_TOKEN_EQUALS) {
 
-				equals = AG_TOKEN_EQUALSTOO;
-				nt = ag_nonterminal_make_symbol(ag, rulename);
-				if (!nt)
-					return 0;
+			equals = AG_TOKEN_EQUALSTOO;
+			nt = ag_nonterminal_make_symbol(ag, rulename);
+			if (!nt) {
+				return 0;
+			}
 
-				if (nt->expression) {
-					if (!nt->tentative)
-						ag_error(ag,
-							"%s:%d: redefinition "
-							"of <%s>\n",
-							ag->input_name,
-							ag->input_line,
-							ag_symbol_text(ag,
-								rulename));
-					ag_expression_free(ag, &nt->expression);
+			if (nt->expression) {
+				if (!nt->tentative) {
+					ag_error(ag,
+						"%s:%d: redefinition "
+						"of <%s>\n",
+						ag->input_name,
+						ag->input_line,
+						ag_symbol_text(ag,
+							rulename));
 				}
-				nt->expression = alt;
-				alt = 0;
+				ag_expression_free(ag, &nt->expression);
+			}
+			nt->expression = alt;
+			alt = 0;
+		}
+		else if (alt)  {
+			nt = ag_nonterminal_make_symbol(ag, rulename);
+			if (  nt->expression
+			   && nt->expression->type
+			   != AG_EXPRESSION_ALTERNATION)
+			{
+				ag_expression *e = NULL;
+				err = ag_compound_add(ag,
+					AG_EXPRESSION_ALTERNATION,
+					&e, &nt->expression);
+				if (err) {
+					return err;
+				}
+				nt->expression = e;
+			}
+			if (alt->type == AG_EXPRESSION_ALTERNATION) {
+				err = ag_compound_add(ag,
+					AG_EXPRESSION_ALTERNATION,
+					&nt->expression,
+					&alt->compound.child);
+				ag_expression_free(ag, &alt);
 			}
 			else {
-				nt = ag_nonterminal_make_symbol(ag, rulename);
-				if (  nt->expression
-				   && nt->expression->type
-				   != AG_EXPRESSION_ALTERNATION)
-				{
-					ag_expression *e = NULL;
-					err = ag_compound_add(ag,
-						AG_EXPRESSION_ALTERNATION, 
-						&e, &nt->expression);
-					if (err) return err;
-					nt->expression = e;
-				}
-				if (alt->type == AG_EXPRESSION_ALTERNATION)
-				{
-					err = ag_compound_add(ag,
-						AG_EXPRESSION_ALTERNATION, 
-						&nt->expression,
-						&alt->compound.child);
-					ag_expression_free(ag, &alt);
-				} else
-					err = ag_compound_add(ag,
-						AG_EXPRESSION_ALTERNATION, 
-						&nt->expression, &alt);
-				if (err)
-					return err;
+				err = ag_compound_add(ag,
+					AG_EXPRESSION_ALTERNATION,
+					&nt->expression, &alt);
 			}
-			if (  !(nt->tentative = tentative)
-			   && !ag->start_symbol)
-			   	ag->start_symbol = rulename;
+			if (err) {
+				return err;
+			}
+		}
+		if (  !(nt->tentative = tentative) && !ag->start_symbol) {
+			ag->start_symbol = rulename;
 		}
 	}
 
-	if (tok == AG_TOKEN_EOF)
+	switch (tok) {
+	case AG_TOKEN_EOF:
 		return 0;
-
-	if (tok != AG_TOKEN_ERROR) {
-		if (tok == AG_TOKEN_NAME)
-		{
-			ag_error(ag, "%s:%d: "
-				"expected \"=\" or \"/=\" after "
-				"left-hand-side name \"%s\"\n",
-				ag->input_name,
-				ag->input_line,
-				ag_symbol_text(ag, ag->token_symbol));
-		}
-		else
-		{
-			ag_error(ag, "%s:%d: "
-				"expected left-hand-side nonterminal name, got %s\n",
-				ag->input_name,
-				ag->input_line,
-				ag_token_string(ag, tok, buf));
-		}
+		break;
+	case AG_TOKEN_ERROR:
+		break;
+	case AG_TOKEN_NAME:
+		ag_error(ag, "%s:%d: "
+			"expected \"=\" or \"/=\" after "
+			"left-hand-side name \"%s\"\n",
+			ag->input_name,
+			ag->input_line,
+			ag_symbol_text(ag, ag->token_symbol));
+		break;
+	default:
+		ag_error(ag, "%s:%d: "
+			"expected left-hand-side nonterminal name, got %s\n",
+			ag->input_name,
+			ag->input_line,
+			ag_token_string(ag, tok, buf));
+		break;
 	}
+
 	return AG_ERROR_SYNTAX;
 }
 
