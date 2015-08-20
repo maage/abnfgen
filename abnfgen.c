@@ -165,10 +165,10 @@ static int ag_process(
 	char const * const * av_tentative,
 	char const * const * av)
 {
-	ag_handle    ag[1];
+	ag_handle   * ag;
 	unsigned int  i;
 
-	memset(ag, 0, sizeof(*ag));
+	ag = calloc(sizeof(ag_handle), 1);
 	ag->verbose          = verbose;
 	ag->full_coverage    = full_coverage;
 	ag->progname         = progname;
