@@ -14,7 +14,7 @@
 
 static char const RFC_4234_CORE[] =
 	"ALPHA	=  %x41-5A / %x61-7A   ; A-Z / a-z\n"
-	"BIT	=  \"0\" / \"1\"\n"
+	"BIT	=  %x30-31      ; 0/1 \n"
 	"CHAR	=  %x01-7F	; any 7-bit US-ASCII character,\n"
 	"			;  excluding NUL\n"
 	"CR	=  %x0D		; carriage return\n"
@@ -23,7 +23,7 @@ static char const RFC_4234_CORE[] =
 	"			; controls\n"
 	"DIGIT	=  %x30-39	; 0-9\n"
 	"DQUOTE	=  %x22		; \" (Double Quote)\n"
-	"HEXDIG	=  DIGIT / \"A\" / \"B\" / \"C\" / \"D\" / \"E\" / \"F\"\n"
+	"HEXDIG	=  {10}( DIGIT ) / {6}( %41-46 ) ; 0-9A-F\n"
 	"HTAB	=  %x09		; horizontal tab\n"
 	"LF	=  %x0A		; linefeed\n"
 	"LWSP	=  *(WSP / CRLF WSP)\n"
