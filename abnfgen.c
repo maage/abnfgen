@@ -90,7 +90,7 @@ void ag_error(ag_handle * ag, char const * fmt, ...)
 void * ag_emalloc(
 	ag_handle * ag,
 	char const * purpose,
-	size_t 	     n)
+	size_t	     n)
 {
 	char * tmp = malloc(n);
 	if (!tmp) {
@@ -106,7 +106,7 @@ static int open_output_file(
 	ag_handle * ag,
 	char const * dir,
 	char const * pat,
-	int 	     i,
+	int	     i,
 	FILE      ** f_out,
 	char      ** name_out)
 {
@@ -169,10 +169,10 @@ static int ag_process(
 	unsigned int  i;
 
 	ag = calloc(sizeof(ag_handle), 1);
-	ag->verbose          = verbose;
+	ag->verbose	     = verbose;
 	ag->full_coverage    = full_coverage;
-	ag->progname         = progname;
-	ag->seed             = seed;
+	ag->progname	     = progname;
+	ag->seed	     = seed;
 	ag->seed_prefix      = seed_prefix;
 	ag->understand_prose = !!understand_prose;
 	ag->legal	     = !!legal;
@@ -181,7 +181,7 @@ static int ag_process(
 
 	hinit(&ag->symbols, 	 char, 1024 * 8);
 	hinit(&ag->nonterminals, ag_nonterminal, 512);
-	hinit(&ag->complained,   char, 512);
+	hinit(&ag->complained,	 char, 512);
 
 	if (start_symbol)
 		ag->start_symbol = ag_symbol_make_lowercase(ag,
