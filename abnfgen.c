@@ -227,7 +227,8 @@ static int ag_process(
 				 "%s: can't create directory %s: %s\n",
 					ag->progname, output_directory,
 					strerror(errno));
-				return 1;
+				ag->errors ++;
+				goto out;
 			}
 			for (i = 0; i < n_cases && !ag->errors; i++) {
 
@@ -253,10 +254,13 @@ static int ag_process(
 			}
 	}
 
+    out:
 	hashfinish(&ag->complained);
 	hashfinish(&ag->nonterminals);
 	hashfinish(&ag->symbols);
-	return ag->errors ? 1 : 0;
+	i = ag->errors ? 1 : 0;
+	free(ag);
+	return i;
 }
 
 int main(int ac, char ** av)
