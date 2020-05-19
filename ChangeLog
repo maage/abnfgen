@@ -99,3 +99,7 @@
 
 	* Forgot to bump up the version number.
 
+2018-04-08  Jutta Degener <jutta@pobox.com>	Version 0.20
+
+	* Parenthesize macro parameters in expressions! (VREALLOC didn't.)
+

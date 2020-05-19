@@ -210,8 +210,8 @@ void    argvfree(char ** argv);
 
 void  * malcpy(void const *, size_t);
 
-#define	TREALLOC(t,p,n)		realloc((p), sizeof(t) * n)
-#define	TMALLOC(t, n)		TREALLOC(t, 0, n)
+#define	TREALLOC(t,p,n)		realloc((p), sizeof(t) * (n))
+#define	TMALLOC(t, n)		TREALLOC(t, 0, (n))
 #define	TFREE(t, p)		TREALLOC(t, p, 0)
 #define	VFREE(p)		((void)realloc(p, 0))
 

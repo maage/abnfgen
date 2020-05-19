@@ -134,6 +134,8 @@ static int open_output_file(
 	char *w, * tmp = ag_emalloc(ag, "output file name",
 		strlen(dir) + 1 + strlen(pat) + 42);
 
+	*f_out = 0;
+	*name_out = 0;
 	if (!tmp) return -1;
 
 	w = tmp;
@@ -263,8 +265,8 @@ static int ag_process(
 			}
 			for (i = 0; i < n_cases && !ag->errors; i++) {
 
-				char * out_name;
-				FILE * out_file;
+				char * out_name = 0;
+				FILE * out_file = 0;
 
 				if (open_output_file(ag,
 					output_directory, pattern, i + 1,
@@ -310,7 +312,7 @@ int main(int ac, char ** av)
 	if ((progname = strrchr(av[0], '/'))) progname++;
 	else progname = av[0];
 
-	av_tentative = argvadd(av_tentative, "");
+	av_tentative = argvadd((char **)0, "");
 
 	while ((opt = getopt(ac, av, "7cd:hln:p:r:s:t:uvw:x_y:")) != EOF)
 		switch (opt) {

@@ -57,7 +57,7 @@ char ** argvadd(char ** argv, char const * arg)
 	}
 	else if (argvarg((char const * const *)argv, arg)) return argv;
 	else {
-		size_t len  = argvlen((char const * const *)argv );
+		size_t len = argvlen((char const * const *)argv );
 		argv = TREALLOC( char *, argv, len + 2 );
 
 		argv[ len     ] = STRMALCPY( arg );
@@ -82,7 +82,9 @@ void argvfree(argv) char ** argv;
 	char ** a;
 
 	if (argv) {
-		for (a = argv; *a; a++) VFREE(*a);
+		for (a = argv; *a; a++) {
+			VFREE(*a);
+		}
 		VFREE(argv);
 	}
 }
@@ -111,7 +113,9 @@ char ** argvcat(char ** argv, char const * const * brgv)
 
 	if (!blen) return argv;
 	if (!alen) {
-		if (argv) VFREE( argv );
+		if (argv) {
+			VFREE( argv );
+		}
 		return argvdup( brgv );
 	}
 
