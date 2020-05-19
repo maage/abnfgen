@@ -337,9 +337,9 @@ static void ag_output_expression(
 	int		indent,
 	int		depth)
 {
-	int 	 	i, c;
+	int 	 	c;
 	char const    * s;
-	size_t       	n;
+	size_t       	i, n;
 	char 		buf[20];
 	ag_nonterminal const * nt;
 
