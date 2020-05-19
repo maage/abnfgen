@@ -297,7 +297,9 @@ static void ag_output_repetition(
 	}
 }
 
-static unsigned long ag_pick_range_coverage(ag_handle * ag, ag_expression * e)
+static unsigned long ag_pick_range_coverage(
+	ag_handle * ag __attribute((unused)),
+	ag_expression * e)
 {
 	unsigned long n, mult, c, pick_c;
 	int	      nopt = 0;
@@ -556,7 +558,7 @@ void ag_output(
 	ag_handle	* ag,
 	FILE 		* fp,
 	char const 	* filename,
-	int		  i,
+	int		  i __attribute((unused)),
 	unsigned int	  depth)
 {
 	ag->output_file = fp;
