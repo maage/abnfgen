@@ -32,26 +32,36 @@
 static char const rcsid[]
 	= "$Id: abnfgen.c,v 1.5 2004/10/23 01:21:52 jutta Exp $";
 
-static char const RFC_4234_CORE[] =
-	"ALPHA	=  %x41-5A / %x61-7A   ; A-Z / a-z\n"
-	"BIT   	=  \"0\" / \"1\"\n"
-	"CHAR  	=  %x01-7F	; any 7-bit US-ASCII character,\n"
-	"			;  excluding NUL\n"
-	"CR    	=  %x0D		; carriage return\n"
-	"CRLF  	=  CR LF	; Internet standard newline\n"
-	"CTL   	=  %x00-1F / %x7F\n"
-	"			; controls\n"
-	"DIGIT 	=  %x30-39	; 0-9\n"
-	"DQUOTE	=  %x22		; \" (Double Quote)\n"
-	"HEXDIG	=  DIGIT / \"A\" / \"B\" / \"C\" / \"D\" / \"E\" / \"F\"\n"
-	"HTAB  	=  %x09		; horizontal tab\n"
-	"LF    	=  %x0A		; linefeed\n"
-	"LWSP  	=  *(WSP / CRLF WSP)\n"
-	"			; linear white space (past newline)\n"
-	"OCTET 	=  %x00-FF	; 8 bits of data\n"
-	"SP    	=  %x20\n"
-	"VCHAR 	=  %x21-7E 	; visible (printing) characters\n"
-	"WSP   	=  SP / HTAB	; white space\n";
+// The only difference to RFC_4234_CORE[] are that the comment for
+// LWSP used to run "linear white space (past newline)"
+static char const RFC_5234_CORE[] =
+        "ALPHA  =  %x41-5A / %x61-7A   ; A-Z / a-z\n"
+        "BIT    =  \"0\" / \"1\"\n"
+        "CHAR   =  %x01-7F      ; any 7-bit US-ASCII character,\n"
+        "                       ;  excluding NUL\n"
+        "CR     =  %x0D         ; carriage return\n"
+        "CRLF   =  CR LF        ; Internet standard newline\n"
+        "CTL    =  %x00-1F / %x7F\n"
+        "                       ; controls\n"
+        "DIGIT  =  %x30-39      ; 0-9\n"
+        "DQUOTE =  %x22         ; \" (Double Quote)\n"
+        "HEXDIG =  DIGIT / \"A\" / \"B\" / \"C\" / \"D\" / \"E\" / \"F\"\n"
+        "HTAB   =  %x09         ; horizontal tab\n"
+        "LF     =  %x0A         ; linefeed\n"
+        "LWSP   =  *(WSP / CRLF WSP)\n"
+        "                       ; Use of this linear-white-space rule\n"
+        "                       ;  permits lines containing only white\n"
+        "                       ;  space that are no longer legal in\n"
+        "                       ;  mail headers and have caused\n"
+        "                       ;  interoperability problems in other\n"
+        "                       ;  contexts.\n"
+        "                       ; Do not use when defining mail\n"
+        "                       ;  headers and use with caution in\n"
+        "                       ;  other contexts.\n"
+        "OCTET  =  %x00-FF      ; 8 bits of data\n"
+        "SP     =  %x20\n"
+        "VCHAR  =  %x21-7E      ; visible (printing) characters\n"
+        "WSP    =  SP / HTAB    ; white space\n";
 
 static void usage(char const * progname)
 {
@@ -66,7 +76,8 @@ static void usage(char const * progname)
 	fputs(
 	"Processing:\n"
 	"   -c 	           -- attempt full coverage\n"
-	"   -l 	           -- (\"legal\") strict RFC 4234 only\n"
+	"   -l 	           -- (\"legal\") no ''{}, strict RFC 5234+7405 only\n"
+	"   -7 	           -- turn off support for RFC 7405, no %s\"x\"\n"
 	"   -y n	   -- limit recursion depth to <n>\n"
 	"   -r n           -- seed random generator with <n>\n"
 	"   -s nonterminal -- start symbol is <nonterminal>\n"
@@ -127,7 +138,7 @@ static int open_output_file(
 
 	w = tmp;
 	if (dir) {
-		while (*w = *dir++)
+		while ((*w = *dir++) != '\0')
 			w++;
 		if (w > tmp && w[-1] != '/')
 			*w++ = '/';
@@ -159,6 +170,7 @@ static int ag_process(
 	int 	      	     verbose,
 	int 	      	     understand_prose,
 	int 	      	     legal,
+	int		     rfc7405,
 	int 	      	     underscore_in_identifiers,
 	int 	      	     full_coverage,
 	char const  	   * output_directory,
@@ -182,6 +194,7 @@ static int ag_process(
 	ag->seed_prefix      = seed_prefix;
 	ag->understand_prose = !!understand_prose;
 	ag->legal	     = !!legal;
+	ag->rfc7405	     = !!rfc7405;
 	ag->underscore_in_identifiers = !!underscore_in_identifiers;
 
 	hinit(&ag->symbols, 	 char, 1024 * 8);
@@ -195,10 +208,11 @@ static int ag_process(
 	if (av_tentative)
 		for (i = 0; av_tentative[i]; i++) {
 
-			if (*av_tentative[i] == '\0')
-				ag_input_string(ag, RFC_4234_CORE,
-				  "ABNF core grammar included in RFC 4234",
-				  1);
+			if (*av_tentative[i] == '\0') {
+				ag_input_string(ag, RFC_5234_CORE,
+					"ABNF core grammar included "
+					"in RFC 5234", 1);
+			}
 			else
 			{
 				FILE * f = fopen(av_tentative[i], "r");
@@ -287,20 +301,25 @@ int main(int ac, char ** av)
 	int		  legal = 0;
 	int		  exclude_core = 0;
 	int		  underscore_in_identifiers = 0;
+	int 		  rfc7405 = 1;
 	extern char 	* optarg;
 	extern int	  optind;
 	char 	       ** av_tentative = 0;
 	char		* start_symbol = 0;
 
-	if (progname = strrchr(av[0], '/')) progname++;
+	if ((progname = strrchr(av[0], '/'))) progname++;
 	else progname = av[0];
 
 	av_tentative = argvadd(av_tentative, "");
 
-	while ((opt = getopt(ac, av, "cd:hln:p:r:s:t:uvw:x_y:")) != EOF)
+	while ((opt = getopt(ac, av, "7cd:hln:p:r:s:t:uvw:x_y:")) != EOF)
 		switch (opt) {
 		case '_':
 			underscore_in_identifiers++;
+			break;
+
+		case '7':
+			rfc7405 = 0;
 			break;
 
 		case 'c':
@@ -383,7 +402,7 @@ int main(int ac, char ** av)
 			progname, progname);
 	}
 	result = ag_process(progname, verbose, understand_prose, legal,
-		underscore_in_identifiers, full_coverage,
+		rfc7405, underscore_in_identifiers, full_coverage,
 		output_directory, pattern, seed, seed_prefix, n_cases, depth,
 		start_symbol,
 		(char const * const *)av_tentative + exclude_core,

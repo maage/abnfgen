@@ -65,6 +65,7 @@ typedef struct {
 	unsigned int	  underscore_in_identifiers: 1;
 	unsigned int	  understand_prose: 1;
 	unsigned int	  legal: 1;
+	unsigned int	  rfc7405: 1;
 
 } ag_handle;
 
@@ -261,6 +262,11 @@ void ag_output(ag_handle *, FILE *, char const *, int, unsigned int);
 /* input.c */
 
 void  ag_input(ag_handle *, FILE *, char const *, int);
+void ag_input_string(
+	ag_handle	* ag,
+	char const	* text,
+	char const 	* filename,
+	int		  tentative);
 
 /* check.c */
 
@@ -303,6 +309,14 @@ ag_symbol ag_symbol_lookup_lowercase(
 	char const		* name);
 
 /* nonterminal.c */
+
+int ag_complained_lookup_symbol(
+	ag_handle 		* ag,
+	ag_symbol		  name);
+
+void ag_complained_make_symbol
+	(ag_handle 		* ag,
+	ag_symbol 		  name);
 
 ag_nonterminal * ag_nonterminal_lookup_symbol(
 	ag_handle 		* ag,

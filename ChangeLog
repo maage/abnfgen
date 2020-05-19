@@ -83,3 +83,10 @@
 
 	* New option -l turns off extensions.
 
+2015-10-19  Jutta Degener <jutta@pobox.com>	Version 0.17
+
+	* Switch base document to RFC 5234.
+	* New option -7 turns off RFC 7405 extensions.
+	* Add support for RFC 7405's %i and %s case-insensitive string syntax.
+		Thanks to Martin Bjorklund for the implementation!
+

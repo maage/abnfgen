@@ -73,7 +73,7 @@ char ** argvdel(char ** argv, char const * arg)
 
 	VFREE( *a );
 
-	while (a[0] = a[1]) a++;
+	while ((a[0] = a[1])) a++;
 	return argv;
 }
 

@@ -155,7 +155,7 @@ static ag_type ag_read_token_name(ag_handle * ag)
 	return ag->token_symbol ? AG_TOKEN_NAME : AG_TOKEN_ERROR;
 }
 
-static ag_type ag_read_token_literal(ag_handle * ag)
+static ag_type ag_read_token_literal(ag_handle * ag, char endc)
 {
 	static char	* s = 0;
 	static size_t	  m = 0;
@@ -180,13 +180,15 @@ static ag_type ag_read_token_literal(ag_handle * ag)
 		c = ag_getc(ag);
 		if (c == EOF)
 		{
-			ag_error(ag, "%s:%d: EOF in literal '%.*s%s'\n",
+			ag_error(ag, "%s:%d: EOF in literal %c%.*s%s%c\n",
 				ag->input_name,
 				ag->input_line,
-				(int)(n > 80 ? 80 : n), s, n > 80 ? "..." : "");
+				endc,
+				(int)(n > 80 ? 80 : n), s, n > 80 ? "..." : "",
+				endc);
 			return AG_TOKEN_ERROR;
 		}
-		if (c == '\'')
+		if (c == (unsigned char)endc)
 			break;
 		s[n++] = c;
 	}
@@ -321,6 +323,50 @@ static int ag_read_token_code(ag_handle * ag, int base, unsigned long * out)
 	return 0;
 }
 
+static ag_type ag_read_rfc7405_string(ag_handle * ag, int code)
+{
+	int c;
+	if ((c = ag_getc(ag)) != '"') {
+		if (!ag->rfc7405) {
+			ag_error(ag, "%s:%d: encountered %%%c, but "
+				"support for RFC 7405 is turned off (with -7) and it's not \n"
+				"followed by a double quote either.\n",
+				ag->input_name, ag->input_line, code);
+		} else if (c == EOF) {
+			ag_error(ag,
+				"%s:%d: expected \" after RFC 7405-style %%%c, got EOF\n", 
+				ag->input_name, ag->input_line, code);
+		} else {
+			ag_error(ag,
+				"%s:%d: expected \" after RFC 7405-style %%%c, "
+				"got '%s'\n", 
+				ag->input_name, ag->input_line, code, renderchar(c));
+		}
+		return AG_TOKEN_ERROR;
+	}
+	if (!ag->rfc7405) {
+		ag_error(ag,
+			"%s:%d: encountered %%%c string in code, but "
+			"support for RFC 7405 is turned off (with -7).\n"
+			"Omit the disabling option or respell the literal "
+			"using '%%d' or '%%x'.\n",
+			ag->input_name, ag->input_line, code);
+		
+	}
+	switch (code) {
+	case 's': return ag_read_token_literal(ag, '"');
+	case 'i': return ag_read_token_string(ag);
+	default:
+		break;
+	}
+	ag_error(ag, 
+		"%s:%d (programmer error) unexpected code '%s'\n",
+		ag->input_name,
+		ag->input_line,
+		renderchar((unsigned char)code));
+	return AG_TOKEN_ERROR;
+}
+
 static ag_type ag_read_token_chars(ag_handle * ag)
 {
 	int c, base;
@@ -337,6 +383,8 @@ static ag_type ag_read_token_chars(ag_handle * ag)
 	case 'b': base = 2;		break;
 	case 'o': base = 8;		break;
 	case 'd': base = 10;		break;
+	case 's':
+	case 'i': return ag_read_rfc7405_string(ag, tolower(c));
 	}
 
 	if (ag_read_token_code(ag, base, &num))
@@ -431,7 +479,7 @@ ag_type ag_read_token(ag_handle * ag)
    
 		  case '\'':
 		  	    if (!ag->legal)
-			    	return ag_read_token_literal(ag);
+			    	return ag_read_token_literal(ag, '\'');
 
 			    ag_error(ag, 
 				"%s:%d unexpected input <'> (omit command-line "
@@ -516,7 +564,7 @@ char const * ag_token_string(ag_handle * ag, ag_type tok, char * buf)
 	case AG_TOKEN_OCTETS:
 		n = ag_symbol_size(ag, ag->token_symbol);
 		sprintf(buf, "<octets \"%.*s\">",
-			n > 100 ? 100 : n, 
+			n > 100 ? 100 : (int)n, 
 			ag_symbol_text(ag, ag->token_symbol));
 		break;
 

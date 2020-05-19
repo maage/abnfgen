@@ -1,7 +1,7 @@
 This is abnfgen, an ABNF-grammar based test case generator.
 
 ABNF -- Advanced Backus Naur Form -- is a grammar format used in
-many protocol specifications.  It is described in RFC 4234.
+many protocol specifications.  It is described in RFCs 5234 and 7405.
 ABNF looks like this:
 	
 	coin = "heads" / "tails"    ; one of two outcomes
