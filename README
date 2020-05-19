@@ -20,3 +20,17 @@ Uses:
     to parse the grammar.
 
 For updates, see <http://www.quut.com/abnfgen>.
+
+
+*** Notes:
+
+- Changed to use srand48, do not set srand in every file, better rand
+  distribution
+- It is best to use ranges if possible, faster and simpler.
+- You need to add cardinality when using alternation when you want to
+  have even distribution, example
+	"HEXDIG	=  {10}( DIGIT ) / {6}( %41-46 ) ; 0-9A-F\n"
+  Otherwise values are distributed:
+  0-9 1/2*1/10=1/20 each and A-F 1/2*1/6=1/12
+- If you limit recursion (-y flag), you can skew
+  distribution. Recursion should be more than any alternation list.
