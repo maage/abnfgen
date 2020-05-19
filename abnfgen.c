@@ -35,33 +35,33 @@ static char const rcsid[]
 // The only difference to RFC_4234_CORE[] are that the comment for
 // LWSP used to run "linear white space (past newline)"
 static char const RFC_5234_CORE[] =
-        "ALPHA  =  %x41-5A / %x61-7A   ; A-Z / a-z\n"
-        "BIT    =  \"0\" / \"1\"\n"
-        "CHAR   =  %x01-7F      ; any 7-bit US-ASCII character,\n"
-        "                       ;  excluding NUL\n"
-        "CR     =  %x0D         ; carriage return\n"
-        "CRLF   =  CR LF        ; Internet standard newline\n"
-        "CTL    =  %x00-1F / %x7F\n"
-        "                       ; controls\n"
-        "DIGIT  =  %x30-39      ; 0-9\n"
-        "DQUOTE =  %x22         ; \" (Double Quote)\n"
-        "HEXDIG =  DIGIT / \"A\" / \"B\" / \"C\" / \"D\" / \"E\" / \"F\"\n"
-        "HTAB   =  %x09         ; horizontal tab\n"
-        "LF     =  %x0A         ; linefeed\n"
-        "LWSP   =  *(WSP / CRLF WSP)\n"
-        "                       ; Use of this linear-white-space rule\n"
-        "                       ;  permits lines containing only white\n"
-        "                       ;  space that are no longer legal in\n"
-        "                       ;  mail headers and have caused\n"
-        "                       ;  interoperability problems in other\n"
-        "                       ;  contexts.\n"
-        "                       ; Do not use when defining mail\n"
-        "                       ;  headers and use with caution in\n"
-        "                       ;  other contexts.\n"
-        "OCTET  =  %x00-FF      ; 8 bits of data\n"
-        "SP     =  %x20\n"
-        "VCHAR  =  %x21-7E      ; visible (printing) characters\n"
-        "WSP    =  SP / HTAB    ; white space\n";
+	"ALPHA  =  %x41-5A / %x61-7A   ; A-Z / a-z\n"
+	"BIT    =  \"0\" / \"1\"\n"
+	"CHAR   =  %x01-7F      ; any 7-bit US-ASCII character,\n"
+	"                       ;  excluding NUL\n"
+	"CR     =  %x0D         ; carriage return\n"
+	"CRLF   =  CR LF        ; Internet standard newline\n"
+	"CTL    =  %x00-1F / %x7F\n"
+	"                       ; controls\n"
+	"DIGIT  =  %x30-39      ; 0-9\n"
+	"DQUOTE =  %x22         ; \" (Double Quote)\n"
+	"HEXDIG =  DIGIT / \"A\" / \"B\" / \"C\" / \"D\" / \"E\" / \"F\"\n"
+	"HTAB   =  %x09         ; horizontal tab\n"
+	"LF     =  %x0A         ; linefeed\n"
+	"LWSP   =  *(WSP / CRLF WSP)\n"
+	"                       ; Use of this linear-white-space rule\n"
+	"                       ;  permits lines containing only white\n"
+	"                       ;  space that are no longer legal in\n"
+	"                       ;  mail headers and have caused\n"
+	"                       ;  interoperability problems in other\n"
+	"                       ;  contexts.\n"
+	"                       ; Do not use when defining mail\n"
+	"                       ;  headers and use with caution in\n"
+	"                       ;  other contexts.\n"
+	"OCTET  =  %x00-FF      ; 8 bits of data\n"
+	"SP     =  %x20\n"
+	"VCHAR  =  %x21-7E      ; visible (printing) characters\n"
+	"WSP    =  SP / HTAB    ; white space\n";
 
 static void usage(char const * progname)
 {
@@ -69,27 +69,27 @@ static void usage(char const * progname)
 		"Usage: %s [options][inputs]\n", progname, VERSION, progname);
 	fputs(
 	"Output:\n"
-	"   -d dir	   -- write output files to directory <dir>\n"
-	"   -n n	   -- write <n> output files with #=1..n\n"
-	"   -p pat#.suf    -- create filenames \"pat#.suf\"\n",
+	"   -d dir          Write output files to directory <dir>\n"
+	"   -n n            write <n> output files with #=1..n\n"
+	"   -p pat#.suf     Create filenames \"pat#.suf\"\n",
 		stderr);
 	fputs(
 	"Processing:\n"
-	"   -c 	           -- attempt full coverage\n"
-	"   -l 	           -- (\"legal\") no ''{}, strict RFC 5234+7405 only\n"
-	"   -7 	           -- turn off support for RFC 7405, no %s\"x\"\n"
-	"   -y n	   -- limit recursion depth to <n>\n"
-	"   -r n           -- seed random generator with <n>\n"
-	"   -s nonterminal -- start symbol is <nonterminal>\n"
-	"   -t file        -- include tentative definitions in <file>\n"
-	"   -u             -- reject rules that contain <prose>\n",
+	"   -c              Attempt full coverage\n"
+	"   -l              (\"legal\") no ''{}, strict RFC 5234+7405 only\n"
+	"   -7              Turn off support for RFC 7405, no %s\"x\"\n"
+	"   -y n            Limit recursion depth to <n>\n"
+	"   -r n            Seed random generator with <n>\n"
+	"   -s nonterminal  Start symbol is <nonterminal>\n"
+	"   -t file         Include tentative definitions in <file>\n"
+	"   -u              Reject rules that contain <prose>\n",
 	   stderr);
 	fputs(
 	"Miscellaneous:\n"
-	"   -x 	           -- exclude (don't preload) the core syntax\n"
-	"   -h 	           -- print this statement\n"
-	"   -w prefix      -- write seed to stdout, prefixed with <prefix>\n"
-	"   -v 	           -- verbose; write rule trace to stderr\n",
+	"   -x              Exclude (don't preload) the core syntax\n"
+	"   -h              Print this statement\n"
+	"   -w prefix       Write seed to stdout, prefixed with <prefix>\n"
+	"   -v              Verbose; write rule trace to stderr\n",
 		stderr);
 	exit(64);
 }
@@ -410,3 +410,4 @@ int main(int ac, char ** av)
 	argvfree(av_tentative);
 	return result;
 }
+

@@ -90,3 +90,8 @@
 	* Add support for RFC 7405's %i and %s case-insensitive string syntax.
 		Thanks to Martin Bjorklund for the implementation!
 
+2018-01-21  Jutta Degener <jutta@pobox.com>	Version 0.18
+
+	* Better usage message: expand tabs, capitalize, remove em-dashes.
+	  (Thanks, Tony R.!)
+
