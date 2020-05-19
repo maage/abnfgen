@@ -130,7 +130,7 @@ static void ag_output_alternation(
 {
 	ag_expression * c;
 	ag_expression * pick = 0;
-	unsigned int 	n;
+	int 	n;
 
 	e->any.coverage_self = 1;
 
@@ -138,9 +138,9 @@ static void ag_output_alternation(
 
 		/*  Find a branch with the shortest distance to termination.
  		 */
-		n = UINT_MAX;
+		n = INT_MAX;
 		for (c = e->compound.child; c; c = c->any.next)
-			if (  c->any.distance >= 0 
+			if (  c->any.distance >= 0
 			   && c->any.distance < n) {
 			   	n    = c->any.distance;
 				pick = c;
