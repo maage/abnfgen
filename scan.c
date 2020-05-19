@@ -390,7 +390,7 @@ static ag_type ag_read_token_chars(ag_handle * ag)
 	c = ag_getc(ag);
 
 	switch (tolower(c)) {
-	default:  ag_ungetc(ag, c);
+	default:  ag_ungetc(ag, c); __attribute__ ((fallthrough));
 	case 'x': base = 16;		break;
 	case 'b': base = 2;		break;
 	case 'o': base = 8;		break;
