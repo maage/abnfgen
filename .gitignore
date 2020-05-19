@@ -6,3 +6,5 @@ Session.vim
 abnfgen
 config.log
 config.status
+autom4te.cache/
+*~
