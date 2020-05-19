@@ -158,7 +158,7 @@ static void ag_output_alternation(
 				if (c->any.coverage_self)
 					continue;
 				n += c->any.chance;
-				if (!pick || PICK(n) < c->any.chance) {
+				if (!pick || (long unsigned int)PICK(n) < c->any.chance) {
 
 					pick = c;
 				}
@@ -176,7 +176,7 @@ static void ag_output_alternation(
 					if (c->any.coverage_recursive)
 						continue;
 					n += c->any.chance;
-					if (!pick || PICK(n) < c->any.chance)
+					if (!pick || (long unsigned int)PICK(n) < c->any.chance)
 						pick = c;
 				}
 			}
@@ -187,7 +187,7 @@ static void ag_output_alternation(
 		for (c = e->compound.child; c; c = c->any.next) {
 			n += c->any.chance;
 
-			if (!pick || PICK(n) < c->any.chance)
+			if (!pick || (long unsigned int)PICK(n) < c->any.chance)
 				pick = c;
 		}
 	}
@@ -267,7 +267,8 @@ static void ag_output_repetition(
 		{
 			if (  l >= e->repetition.min
 			   && (  depth <= 0
-			      || PICK( e->repetition.left_chance 
+			      || (long unsigned int)PICK(
+                                       e->repetition.left_chance
 				     + e->repetition.right_chance)
 				< e->repetition.left_chance))
 
@@ -315,7 +316,7 @@ static unsigned long ag_pick_range_coverage(
 			mult = 1 + (e->range.to - c) / 256;
 			n   += mult;
 
-		      	if (!nopt++ || PICK(n) < mult) {
+			if (!nopt++ || (long unsigned int)PICK(n) < mult) {
 				pick_c = c;
 			}
 		}

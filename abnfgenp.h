@@ -240,7 +240,7 @@ size_t 	     hashsize(	 hashtable *, void const *);
 
 /* rand */
 
-#define PICK(n) 	((int)(drand48() * ((double)(n))))
+#define PICK(n) 	((long int)(drand48() * ((double)(n))))
 
 /* string.c */
 
