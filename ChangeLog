@@ -95,3 +95,7 @@
 	* Better usage message: expand tabs, capitalize, remove em-dashes.
 	  (Thanks, Tony R.!)
 
+2018-01-31  Jutta Degener <jutta@pobox.com>	Version 0.19
+
+	* Forgot to bump up the version number.
+

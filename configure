@@ -1509,7 +1509,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=abnfgen
- VERSION=0.18
+ VERSION=0.19
 
 
 cat >>confdefs.h <<_ACEOF
